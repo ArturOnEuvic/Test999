@@ -15,8 +15,6 @@ tablicaTestowa = of([1,2,3,4,5]);
 
 
 
-// Produces
-
 
 
   ngOnInit(): void {
@@ -24,14 +22,8 @@ tablicaTestowa = of([1,2,3,4,5]);
 
   constructor(private snackBar: MatSnackBar) {}
 
-
-
-  openSnackBar(message){
+  openSnackBar(message: string){
     this.snackBar.open(message);
   }
-
-
-
-
 
 }
