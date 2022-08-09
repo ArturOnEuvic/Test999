@@ -1,0 +1,44 @@
+body{
+    overflow: hidden;
+}
+
+.mat-sidenav-container {
+ height: 100%;   
+ position: sticky;
+}
+
+.mat-sidenav{
+    padding: 1.5rem;
+}
+
+.mat-sidenav{
+    background-color: rgb(14, 218, 218);
+    width: 10rem;
+}
+
+
+li{
+    list-style: none;
+    max-width: 100%;
+}
+a{
+    font-size: medium;
+    color: black;
+    text-align: center;
+    margin: 0 auto;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 1rem;
+    display: block;
+    color: inherit;
+}
+
+
+
+
+.nav-link:active{
+    background-color: white;
+   
+
+
+}
