@@ -13,7 +13,7 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'start',
+    path: '',
     loadChildren: () => import('./start/start.module').then(m => m.StartModule),
     pathMatch: 'full'
   },
