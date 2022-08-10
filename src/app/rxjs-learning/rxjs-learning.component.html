@@ -2,11 +2,14 @@
 
 
 
+<ng-container *ngIf="{tablica: tablicaTestowa |async} as subs">
 
-<button mat-button (click)="openSnackBar('{{tablicaTestowa |async}}')">
+
+<button mat-button (click)="openSnackBar(subs.tablica)">
 
 <div class="alert alert-success" role="alert">
    Jakis napis
 </div>
-  
+
 </button>
+</ng-container>  
