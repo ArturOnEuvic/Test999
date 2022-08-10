@@ -17,6 +17,7 @@ tablicaTestowa?:Observable< number[] |null>
 
   ngOnInit(): void {
     this.tablicaTestowa = of([1,2,3,4,5]);
+
   }
 
   constructor(private snackBar: MatSnackBar) {}
@@ -27,12 +28,16 @@ tablicaTestowa?:Observable< number[] |null>
     }
   }
 
-  pipe(){
-    of([1,2,3,4,5])
-    .pipe(tap((val) => console.log(this.tablicaTestowa)))
-    .subscribe(console.log);
-    
-  }
+
+
+  someValues = of(1, 2, 3, 4, 5);
+  logValues = this.someValues.pipe(
+    tap(() => console.log()),
+  );
+  subscribe = this.logValues.subscribe((val: number) => console.log(val));
+
+
+
 
 }
 
