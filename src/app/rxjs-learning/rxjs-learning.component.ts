@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Observable, of} from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { tap } from 'rxjs';
+import { tap, pipe } from 'rxjs';
 
 
 @Component({
@@ -11,14 +11,19 @@ import { tap } from 'rxjs';
 })
 export class RxjsLearningComponent implements OnInit {
 
+
 tablicaTestowa?:Observable< number[] |null>
 
 
 
-  ngOnInit(): void {
-    this.tablicaTestowa = of([1,2,3,4,5]);
 
+
+  ngOnInit(): any {
+    this.tablicaTestowa = of([1,2,3,4,5]).pipe(tap(console.log))
   }
+
+
+
 
   constructor(private snackBar: MatSnackBar) {}
 
@@ -29,13 +34,7 @@ tablicaTestowa?:Observable< number[] |null>
   }
 
 
-
-  someValues = of(1, 2, 3, 4, 5);
-  logValues = this.someValues.pipe(
-    tap(() => console.log()),
-  );
-  subscribe = this.logValues.subscribe((val: number) => console.log(val));
-
+ 
 
 
 
