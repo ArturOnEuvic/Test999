@@ -14,16 +14,9 @@ export class RxjsLearningComponent implements OnInit {
 
 tablicaTestowa?:Observable< number[] |null>
 
-
-
-
-
   ngOnInit(): any {
     this.tablicaTestowa = of([1,2,3,4,5]).pipe(tap(console.log))
   }
-
-
-
 
   constructor(private snackBar: MatSnackBar) {}
 
@@ -32,12 +25,6 @@ tablicaTestowa?:Observable< number[] |null>
     this.snackBar.open(message.join(','));
     }
   }
-
-
- 
-
-
-
 }
 
 

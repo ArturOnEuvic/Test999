@@ -1,0 +1,42 @@
+*{
+    box-sizing: border-box;
+}
+
+#big_one{
+max-width: 70%;
+max-height: 15rem;
+display: inline-block;
+position: relative;
+left: 30%;
+top: 15%;
+right: 15%;
+}
+
+#small_one{
+    display: grid;
+    position: relative;
+    max-width: 25%;
+    margin-left: 2%;
+}
+
+
+#text_area{
+display: block;
+background-color: rgb(223, 231, 238);
+width: 40vw;
+height: 15vh;
+margin: 2px;
+}
+
+.input{
+    padding: .1em;
+    margin: .5em;
+}
+
+.dark_mode{
+    margin: .5em;
+}
+
+.panel{
+    margin: .5rem;
+}

@@ -1,15 +1,36 @@
-<p>rxjs-learning works!</p>
-
-
-
 <ng-container *ngIf="{tablica: tablicaTestowa |async} as subs">
-
-
 <button mat-button (click)="openSnackBar(subs.tablica)">
-
 <div class="alert alert-success" role="alert">
-   Jakis napis
+   Show 1-5
 </div>
-
 </button>
+
+
+
+
+<section id="big_one">
+   
+   <div id="text_area">...</div>
+
+</section>
+<section id="small_one">
+   <button mat-button id="time_event">
+      Timer Interval
+   </button>
+
+   <input class="input" id="text_one" type="text" placeholder="Propagate">
+   
+   <input class="input" id="text_two" type="text"  placeholder="Filter">
+
+   <mat-slide-toggle class="dark_mode">Dark Mode</mat-slide-toggle>
+   
+   <div class="panel">
+      Status:<br>
+      Timer On/Off<br>
+      Last input:<br>
+      Filter: On/Off<br>
+      Filter values:<br>
+   </div>
+</section>
+
 </ng-container>  
