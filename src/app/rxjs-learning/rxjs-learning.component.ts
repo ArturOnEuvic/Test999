@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Observable, of} from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { tap, pipe } from 'rxjs';
+import { tap} from 'rxjs';
 
 
 @Component({
