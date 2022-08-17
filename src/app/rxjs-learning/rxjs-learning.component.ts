@@ -1,56 +1,63 @@
 import { Component, OnInit } from '@angular/core';
-import {interval, Observable, of, tap, range, min, max } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import {BehaviorSubject} from 'rxjs';
-
-
-
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { BehaviorSubject, merge, Subject } from 'rxjs';
 
 
 @Component({
   selector: 'app-rxjs-learning',
   templateUrl: './rxjs-learning.component.html',
-  styleUrls: ['./rxjs-learning.component.css']
+  styleUrls: ['./rxjs-learning.component.css'],
 })
 export class RxjsLearningComponent implements OnInit {
-  title = 'toolsets'
-  data: number = 0;
+
+  // wynikowy stream który jest wyświetlany w textarea 
+  textAreaOutput$ = new BehaviorSubject<string>('');
+  randomValueStream$ = new Subject<string>();
+  intervalStream$ = new Subject<string>();
+  myInterval: any;
 
 
+  inputForm: FormGroup;
 
-  
-setInterval(): any{
-const data = range(1,10);
-this.data = Math.floor(min)
-this.data = Math.floor(max)
-this.data = Math.floor(Math.random() * max - min + 1) + min;
-data.subscribe((d) => {
-  console.log(d);
-  this.data = d;
-  });
-}
+  constructor(private formBuilder: FormBuilder) {
 
-
-
-
-
-
-tablicaTestowa?:Observable< number[] |null>
+    this.inputForm = this.formBuilder.group({
+      propagate: new FormControl('', { updateOn: 'submit' }),
+    })
+  }
 
   ngOnInit(): any {
-    this.tablicaTestowa = of([1,2,3,4,5]).pipe(tap(console.log))
+
+    const propagatevalueChanges$ = this.inputForm.controls['propagate'].valueChanges;
+
+    // scalanie wyników w jeden stream, przy pomocy 'merge'
+    merge(this.randomValueStream$, this.intervalStream$, propagatevalueChanges$)
+      .subscribe((valueEmitted) => {
+
+        let currentValue = this.textAreaOutput$.value;
+        const newLine = "\r\n";
+        this.textAreaOutput$.next(valueEmitted + newLine + currentValue);
+      });
+
   }
-  constructor(private snackBar: MatSnackBar) {}
-  openSnackBar(message: number[] |null){
-    if(message){
-    this.snackBar.open(message.join(','));
+
+  emitRandomValue(): void {
+    this.randomValueStream$.next(this.randomIntFromInterval(1, 100).toString());
+  }
+
+  randomIntFromInterval(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1) + min)
+  }
+
+  toggleInterval(): void {
+    if (this.myInterval) {
+      clearInterval(this.myInterval);
+    } else {
+      this.myInterval = setInterval(this.intervalMethod.bind(this), 2000);
     }
   }
 
-    
-    
-  
+  intervalMethod() {
+    this.intervalStream$.next(this.randomIntFromInterval(300, 400).toString());
+  }
 }
-
-
-

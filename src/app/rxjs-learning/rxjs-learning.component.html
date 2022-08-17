@@ -1,36 +1,37 @@
-<ng-container *ngIf="{tablica: tablicaTestowa |async} as subs">
-<button mat-button (click)="openSnackBar(subs.tablica)">
-<div class="alert alert-success" role="alert">
-   Show 1-5
-</div>
-</button>
-
-
-
-
 <section id="big_one">
-   
-   <div id="text_area">{{data}}</div>
-
+   <textarea id="text_area">{{textAreaOutput$ | async}}</textarea>
 </section>
 <section id="small_one">
-   <button mat-button id="time_event">
-      Timer Interval
+   <button mat-button id="time_event" (click)="emitRandomValue()">
+      Emit random value
    </button>
 
-   <input class="input" id="text_one" type="text" placeholder="Propagate">
-   
-   <input class="input" id="text_two" type="text"  placeholder="Filter">
+   <button mat-button id="time_event" (click)="toggleInterval()">
+      Toggle Interval
+   </button>
+
+   <button mat-button id="time_event">
+      Clear (TODO)
+   </button>
+
+   <form [formGroup]="inputForm">
+      <mat-form-field>
+         <mat-label>Propagate</mat-label>
+         <input matInput formControlName="propagate" type="text">
+      </mat-form-field>
+   </form>
+
+   TODO: FILTER
+
+
 
    <mat-slide-toggle class="dark_mode">Filter</mat-slide-toggle>
 
    <div class="panel">
-      Status:<br>
-      Timer On/Off<br>
-      Last input:<br>
-      Filter: On/Off<br>
-      Filter values:<br>
+      TODO: Status:<br>
+      TODO: Timer On/Off<br>
+      TODO: Last input:<br>
+      TODO: Filter: On/Off<br>
+      TODO: Filter values:<br>
    </div>
 </section>
-
-</ng-container>  
