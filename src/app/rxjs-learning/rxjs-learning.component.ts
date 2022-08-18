@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { BehaviorSubject, merge, Subject } from 'rxjs';
+import { BehaviorSubject, map, merge, Subject } from 'rxjs';
 
 
 @Component({
@@ -10,18 +10,23 @@ import { BehaviorSubject, merge, Subject } from 'rxjs';
 })
 export class RxjsLearningComponent implements OnInit {
 
-  // wynikowy stream który jest wyświetlany w textarea 
-  textAreaOutput$ = new BehaviorSubject<string>('');
-  randomValueStream$ = new Subject<string>();
+  //! wynikowy stream który jest wyświetlany w textarea  
+  textAreaOutput$ = new BehaviorSubject<string>(''); 
+  // behaviorsubject sprawia, ze wyświetlane są po subskrypcji zarówno dane z poprzednich operacj, jak i te nowe
+  randomValueStream$ = new Subject<string>(); 
+  // subject nie utrzymuje wartości
   intervalStream$ = new Subject<string>();
-  myInterval: any;
-
-
+  myInterval: any; 
+  //typ any to dowolna wartość, przeciwność void, które jest pustą wartością
+  //subjects mogą być observerem i observable w tym samym czasie
+  //subject pozwala propagować wiele subskrypcji na raz
   inputForm: FormGroup;
-  
 
+
+
+//konstruktor inicjalizuje klasy, ale nie wykonuje żadnej pracy
   constructor(private formBuilder: FormBuilder) {
-
+//
     this.inputForm = this.formBuilder.group({
       propagate: new FormControl('', { updateOn: 'submit' }),
       kopytka: new FormControl('', {updateOn: 'submit'}),
@@ -32,28 +37,28 @@ export class RxjsLearningComponent implements OnInit {
   ngOnInit(): any {
 
     const propagatevalueChanges$ = this.inputForm.controls['propagate'].valueChanges;
+    const kopytkaChanges$ = this.inputForm.controls['kopytka'].valueChanges;
 
-    // scalanie wyników w jeden stream, przy pomocy 'merge'
-    merge(this.randomValueStream$, this.intervalStream$, propagatevalueChanges$)
+    //! scalanie wyników w jeden stream, przy pomocy 'merge'
+    //podział wartości na subskrybowane wcześniej i aktualne
+    merge(this.randomValueStream$, this.intervalStream$, propagatevalueChanges$, kopytkaChanges$.pipe(map(k => k + ' kopytko')))
       .subscribe((valueEmitted: string) => {
-
         let currentValue = this.textAreaOutput$.value;
         const newLine = "\r\n";
         this.textAreaOutput$.next(valueEmitted + newLine + currentValue);
       });
 
-      const kopytkaChanges$ = this.inputForm.controls['kopytka'].valueChanges;
       
-    kopytkaChanges$
-        .subscribe((valueEmitted: string) => {
-          let currentValue = this.textAreaOutput$.value;
-          const newLine = "\r\n";
-          this.textAreaOutput$.next(valueEmitted + ' kopytka' + newLine + currentValue);
-        });
-
+  /*   kopytkaChanges$
+      .subscribe((valueEmitted: string) => {
+        let currentValue = this.textAreaOutput$.value;
+        const newLine = "\r\n";
+        this.textAreaOutput$.next(valueEmitted + ' kopytka' + newLine + currentValue);
+      });
+*/
   }
 
-
+//tworzenie metod reagujących na interakcję usera:
   emitRandomValue(): void {
     this.randomValueStream$.next(this.randomIntFromInterval(1, 100).toString());
   }
@@ -75,10 +80,18 @@ export class RxjsLearningComponent implements OnInit {
   }
 
   clearAll(): void{
-    this.textAreaOutput$
+    this.textAreaOutput$.next('');
   }
 
 
 
 }
 
+
+/*
+1.eksportujemy rxjs'a
+2.tworzymy property, nadajemy im jeden z subjectów
+3.konstruktor do propagate inputForm
+4.tworzenie ngOnInit - wbudowana metoda, która uruchamia raz zapisany wewnątrz kod
+5.kolejne metody
+*/
