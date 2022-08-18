@@ -10,7 +10,7 @@
       Toggle Interval
    </button>
 
-   <button mat-button id="time_event">
+   <button mat-button id="time_event" (click)="clearAll()">
       Clear (TODO)
    </button>
 
@@ -20,6 +20,14 @@
          <input matInput formControlName="propagate" type="text">
       </mat-form-field>
    </form>
+
+
+   <form [formGroup]="inputForm">
+      <mat-form-field>
+         <mat-label>Kopytka</mat-label>
+         <input matInput formControlName="kopytka" type="text">
+      </mat-form-field>
+   </form>>
 
    TODO: FILTER
 

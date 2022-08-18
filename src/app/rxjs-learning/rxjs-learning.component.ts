@@ -18,12 +18,15 @@ export class RxjsLearningComponent implements OnInit {
 
 
   inputForm: FormGroup;
+  
 
   constructor(private formBuilder: FormBuilder) {
 
     this.inputForm = this.formBuilder.group({
       propagate: new FormControl('', { updateOn: 'submit' }),
+      kopytka: new FormControl('', {updateOn: 'submit'})
     })
+  
   }
 
   ngOnInit(): any {
@@ -32,14 +35,26 @@ export class RxjsLearningComponent implements OnInit {
 
     // scalanie wyników w jeden stream, przy pomocy 'merge'
     merge(this.randomValueStream$, this.intervalStream$, propagatevalueChanges$)
-      .subscribe((valueEmitted) => {
+      .subscribe((valueEmitted: string) => {
 
         let currentValue = this.textAreaOutput$.value;
         const newLine = "\r\n";
         this.textAreaOutput$.next(valueEmitted + newLine + currentValue);
       });
 
+
+      const kopytkaChanges$ = this.inputForm.controls['kopytka'].valueChanges;
+      
+      merge(this.randomValueStream$, this.intervalStream$, kopytkaChanges$)
+        .subscribe((valueEmitted: string) => {
+  
+          let currentValue = this.textAreaOutput$.value;
+          const newLine = "\r\n";
+          this.textAreaOutput$.next(valueEmitted + ' kopytka' + newLine + currentValue);
+        });
+
   }
+
 
   emitRandomValue(): void {
     this.randomValueStream$.next(this.randomIntFromInterval(1, 100).toString());
@@ -60,4 +75,13 @@ export class RxjsLearningComponent implements OnInit {
   intervalMethod() {
     this.intervalStream$.next(this.randomIntFromInterval(300, 400).toString());
   }
+
+  clearAll(): void{
+    this.textAreaOutput$.next(this.ngOnInit().reset())
+  }
+
+
+
+
 }
+
