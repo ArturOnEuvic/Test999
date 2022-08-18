@@ -24,7 +24,7 @@ export class RxjsLearningComponent implements OnInit {
 
     this.inputForm = this.formBuilder.group({
       propagate: new FormControl('', { updateOn: 'submit' }),
-      kopytka: new FormControl('', {updateOn: 'submit'})
+      kopytka: new FormControl('', {updateOn: 'submit'}),
     })
   
   }
@@ -42,12 +42,10 @@ export class RxjsLearningComponent implements OnInit {
         this.textAreaOutput$.next(valueEmitted + newLine + currentValue);
       });
 
-
       const kopytkaChanges$ = this.inputForm.controls['kopytka'].valueChanges;
       
-      merge(this.randomValueStream$, this.intervalStream$, kopytkaChanges$)
+    kopytkaChanges$
         .subscribe((valueEmitted: string) => {
-  
           let currentValue = this.textAreaOutput$.value;
           const newLine = "\r\n";
           this.textAreaOutput$.next(valueEmitted + ' kopytka' + newLine + currentValue);
@@ -77,9 +75,8 @@ export class RxjsLearningComponent implements OnInit {
   }
 
   clearAll(): void{
-    this.textAreaOutput$.next(this.ngOnInit().reset())
+    this.textAreaOutput$
   }
-
 
 
 
