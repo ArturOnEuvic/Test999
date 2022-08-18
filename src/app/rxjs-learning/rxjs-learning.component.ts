@@ -17,17 +17,17 @@ export class RxjsLearningComponent implements OnInit {
   // subject nie utrzymuje wartości
   intervalStream$ = new Subject<string>();
   myInterval: any; 
-  //typ any to dowolna wartość, przeciwność void, które jest pustą wartością
   //subjects mogą być observerem i observable w tym samym czasie
   //subject pozwala propagować wiele subskrypcji na raz
   inputForm: FormGroup;
+  //jak dobrze rozumiem te formgroup jest wbudowane i definiuje jak będzie działał input field na stronie
 
 
 
 //konstruktor inicjalizuje klasy, ale nie wykonuje żadnej pracy
   constructor(private formBuilder: FormBuilder) {
-//
     this.inputForm = this.formBuilder.group({
+      //dzięki "updateOn: submit" propagate i kopytka się aktualizują jako gotowy output w momencie kiedy user to zatwierdzi
       propagate: new FormControl('', { updateOn: 'submit' }),
       kopytka: new FormControl('', {updateOn: 'submit'}),
     })
@@ -58,7 +58,7 @@ export class RxjsLearningComponent implements OnInit {
 */
   }
 
-//tworzenie metod reagujących na interakcję usera:
+//tworzenie metod reagujących na interakcję usera (generuje random, interval, czyści output area):
   emitRandomValue(): void {
     this.randomValueStream$.next(this.randomIntFromInterval(1, 100).toString());
   }
@@ -93,5 +93,5 @@ export class RxjsLearningComponent implements OnInit {
 2.tworzymy property, nadajemy im jeden z subjectów
 3.konstruktor do propagate inputForm
 4.tworzenie ngOnInit - wbudowana metoda, która uruchamia raz zapisany wewnątrz kod
-5.kolejne metody
+5.własne metody wywoływane tyle razy ile będą subskrybowane
 */
