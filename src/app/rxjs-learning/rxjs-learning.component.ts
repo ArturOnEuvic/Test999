@@ -13,6 +13,7 @@ export class RxjsLearningComponent implements OnInit {
   //! wynikowy stream który jest wyświetlany w textarea  
   textAreaOutput$ = new BehaviorSubject<string>(''); 
   // behaviorsubject sprawia, ze wyświetlane są po subskrypcji zarówno dane z poprzednich operacj, jak i te nowe
+  //! MM: nie tak działa ReplaySubject, że można mu ustawić ile wartości wstecz ma zwrócić, BehaviorSubject działa tak że zwraca wartosci w subscibe + zawsze można z niego wyciągnać aktualną wartość 
   randomValueStream$ = new Subject<string>(); 
   // subject nie utrzymuje wartości
   intervalStream$ = new Subject<string>();
@@ -41,6 +42,8 @@ export class RxjsLearningComponent implements OnInit {
 
     //! scalanie wyników w jeden stream, przy pomocy 'merge'
     //podział wartości na subskrybowane wcześniej i aktualne
+    //! MM: tutaj nie ma żadnego podziału, po prostu przy użyciu merge, scalamy nowe wartości emitowane przez te cztery streamy 
+    //! MM: textAreaOutput$ które jest behavior subject pozwaala nam wyciagnać co jest aktualnie w text areaa i dokleić na początek nową wartość, z któregokolwiek ze streama
     merge(this.randomValueStream$, this.intervalStream$, propagatevalueChanges$, kopytkaChanges$.pipe(map(k => k + ' kopytko')))
       .subscribe((valueEmitted: string) => {
         let currentValue = this.textAreaOutput$.value;
@@ -49,13 +52,7 @@ export class RxjsLearningComponent implements OnInit {
       });
 
       
-  /*   kopytkaChanges$
-      .subscribe((valueEmitted: string) => {
-        let currentValue = this.textAreaOutput$.value;
-        const newLine = "\r\n";
-        this.textAreaOutput$.next(valueEmitted + ' kopytka' + newLine + currentValue);
-      });
-*/
+ 
   }
 
 //tworzenie metod reagujących na interakcję usera (generuje random, interval, czyści output area):
@@ -82,9 +79,6 @@ export class RxjsLearningComponent implements OnInit {
   clearAll(): void{
     this.textAreaOutput$.next('');
   }
-
-
-
 }
 
 
