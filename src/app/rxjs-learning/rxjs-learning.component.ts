@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { BehaviorSubject, map, merge, Subject} from 'rxjs';
+import { BehaviorSubject, map, merge, Subject } from 'rxjs';
 
 
 @Component({
@@ -17,7 +17,7 @@ export class RxjsLearningComponent implements OnInit {
   randomValueStream$ = new Subject<string>(); 
   // subject nie utrzymuje wartości
   intervalStream$ = new Subject<string>();
-  on_offInfo$ = new Subject<boolean>();
+  on_offInfo$ = new BehaviorSubject<boolean>(false);
   lastInput$ = new BehaviorSubject<string>('');
   on_offFilterInfo$ = new Subject<boolean>();
   myInterval: any; 
@@ -76,6 +76,7 @@ export class RxjsLearningComponent implements OnInit {
   toggleInterval(): void {
     if (this.myInterval) {
       clearInterval(this.myInterval),
+      this.myInterval = null;
       this.on_offInfo$.next(false)
     } else {
       this.myInterval = setInterval(this.intervalMethod.bind(this), 2000),
