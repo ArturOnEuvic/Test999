@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { BehaviorSubject, map, merge, Subject } from 'rxjs';
+import { BehaviorSubject, map, merge, Subject} from 'rxjs';
 
 
 @Component({
@@ -17,6 +17,9 @@ export class RxjsLearningComponent implements OnInit {
   randomValueStream$ = new Subject<string>(); 
   // subject nie utrzymuje wartości
   intervalStream$ = new Subject<string>();
+  on_offInfo$ = new Subject<boolean>();
+  lastInput$ = new BehaviorSubject<string>('');
+  on_offFilterInfo$ = new Subject<boolean>();
   myInterval: any; 
   //subjects mogą być observerem i observable w tym samym czasie
   //subject pozwala propagować wiele subskrypcji na raz
@@ -35,16 +38,22 @@ export class RxjsLearningComponent implements OnInit {
   
   }
 
+  
+
+
   ngOnInit(): any {
 
     const propagatevalueChanges$ = this.inputForm.controls['propagate'].valueChanges;
     const kopytkaChanges$ = this.inputForm.controls['kopytka'].valueChanges;
+    //const booleanValues$ = this.on_offInfo$.controls['timer_on_off'].valueChanges;
+
+
 
     //! scalanie wyników w jeden stream, przy pomocy 'merge'
     //podział wartości na subskrybowane wcześniej i aktualne
     //! MM: tutaj nie ma żadnego podziału, po prostu przy użyciu merge, scalamy nowe wartości emitowane przez te cztery streamy 
     //! MM: textAreaOutput$ które jest behavior subject pozwaala nam wyciagnać co jest aktualnie w text areaa i dokleić na początek nową wartość, z któregokolwiek ze streama
-    merge(this.randomValueStream$, this.intervalStream$, propagatevalueChanges$, kopytkaChanges$.pipe(map(k => k + ' kopytko')))
+    merge(this.randomValueStream$, this.intervalStream$, /*booleanValues$,*/ propagatevalueChanges$, kopytkaChanges$.pipe(map(k => k + ' kopytko')))
       .subscribe((valueEmitted: string) => {
         let currentValue = this.textAreaOutput$.value;
         const newLine = "\r\n";
@@ -66,9 +75,11 @@ export class RxjsLearningComponent implements OnInit {
 
   toggleInterval(): void {
     if (this.myInterval) {
-      clearInterval(this.myInterval);
+      clearInterval(this.myInterval),
+      this.on_offInfo$.next(false)
     } else {
-      this.myInterval = setInterval(this.intervalMethod.bind(this), 2000);
+      this.myInterval = setInterval(this.intervalMethod.bind(this), 2000),
+      this.on_offInfo$.next(true)
     }
   }
 
@@ -79,6 +90,8 @@ export class RxjsLearningComponent implements OnInit {
   clearAll(): void{
     this.textAreaOutput$.next('');
   }
+
+
 }
 
 
