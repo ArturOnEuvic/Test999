@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { BehaviorSubject, filter, from, map, merge, mergeWith, Subject, takeLast} from 'rxjs';
+import { BehaviorSubject, filter, from, map, merge, Subject, takeLast} from 'rxjs';
 
 
 @Component({
@@ -59,9 +59,9 @@ export class RxjsLearningComponent implements OnInit {
         let currentValue = this.textAreaOutput$.value;
         const newLine = "\r\n";
         this.textAreaOutput$.next(valueEmitted + newLine + currentValue);
+        this.lastInput$.next(valueEmitted)
       }); 
-    merge(this.textAreaOutput$, propagatevalueChanges$, kopytkaChanges$)
-      .subscribe()
+
   }
 
 //tworzenie metod reagujących na interakcję usera (generuje random, interval, czyści output area):
@@ -93,9 +93,10 @@ export class RxjsLearningComponent implements OnInit {
   }
 
   lastInputMethod(){
-   this.lastInput$.pipe(takeLast(1))
+      this.lastInput$.pipe(takeLast(1))
    
   }
+
 
 
 
