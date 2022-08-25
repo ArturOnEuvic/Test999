@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { BehaviorSubject, map, merge, Subject } from 'rxjs';
+import { BehaviorSubject, filter, from, map, merge, mergeWith, Subject, takeLast} from 'rxjs';
 
 
 @Component({
@@ -11,16 +11,17 @@ import { BehaviorSubject, map, merge, Subject } from 'rxjs';
 export class RxjsLearningComponent implements OnInit {
 
   //! wynikowy stream który jest wyświetlany w textarea  
-  textAreaOutput$ = new BehaviorSubject<string>(''); 
+  textAreaOutput$ = new BehaviorSubject<string>('');
   // behaviorsubject sprawia, ze wyświetlane są po subskrypcji zarówno dane z poprzednich operacj, jak i te nowe
   //! MM: nie tak działa ReplaySubject, że można mu ustawić ile wartości wstecz ma zwrócić, BehaviorSubject działa tak że zwraca wartosci w subscibe + zawsze można z niego wyciągnać aktualną wartość 
-  randomValueStream$ = new Subject<string>(); 
+  randomValueStream$ = new Subject<string>();
   // subject nie utrzymuje wartości
   intervalStream$ = new Subject<string>();
   on_offInfo$ = new BehaviorSubject<boolean>(false);
   lastInput$ = new BehaviorSubject<string>('');
+  useFilter = new Subject<string>();
   on_offFilterInfo$ = new Subject<boolean>();
-  myInterval: any; 
+  myInterval: any;
   //subjects mogą być observerem i observable w tym samym czasie
   //subject pozwala propagować wiele subskrypcji na raz
   inputForm: FormGroup;
@@ -53,15 +54,14 @@ export class RxjsLearningComponent implements OnInit {
     //podział wartości na subskrybowane wcześniej i aktualne
     //! MM: tutaj nie ma żadnego podziału, po prostu przy użyciu merge, scalamy nowe wartości emitowane przez te cztery streamy 
     //! MM: textAreaOutput$ które jest behavior subject pozwaala nam wyciagnać co jest aktualnie w text areaa i dokleić na początek nową wartość, z któregokolwiek ze streama
-    merge(this.randomValueStream$, this.intervalStream$, /*booleanValues$,*/ propagatevalueChanges$, kopytkaChanges$.pipe(map(k => k + ' kopytko')))
+    merge(this.randomValueStream$, this.intervalStream$, propagatevalueChanges$, kopytkaChanges$.pipe(map(k => k + ' kopytko')))
       .subscribe((valueEmitted: string) => {
         let currentValue = this.textAreaOutput$.value;
         const newLine = "\r\n";
         this.textAreaOutput$.next(valueEmitted + newLine + currentValue);
-      });
-
-      
- 
+      }); 
+    merge(this.textAreaOutput$, propagatevalueChanges$, kopytkaChanges$)
+      .subscribe()
   }
 
 //tworzenie metod reagujących na interakcję usera (generuje random, interval, czyści output area):
@@ -91,6 +91,28 @@ export class RxjsLearningComponent implements OnInit {
   clearAll(): void{
     this.textAreaOutput$.next('');
   }
+
+  lastInputMethod(){
+   this.lastInput$.pipe(takeLast(1))
+   
+  }
+
+
+
+
+  /*filterMethod(){
+    if (this.useFilter) {
+      filter(this.useFilter),
+      this.useFilter = null;
+      this.on_offFilterInfo$
+    } else {
+      this.useFilter.pipe{
+        filter()
+      }
+    }
+  }
+  */
+
 
 
 }
