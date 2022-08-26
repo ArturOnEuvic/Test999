@@ -59,7 +59,7 @@ export class RxjsLearningComponent implements OnInit {
         let currentValue = this.textAreaOutput$.value;
         const newLine = "\r\n";
         this.textAreaOutput$.next(valueEmitted + newLine + currentValue);
-        this.lastInput$.next(valueEmitted)
+        this.lastInput$.next(valueEmitted);
       }); 
 
   }
@@ -94,25 +94,10 @@ export class RxjsLearningComponent implements OnInit {
 
   lastInputMethod(){
       this.lastInput$.pipe(takeLast(1))
-   
   }
 
 
 
-
-
-  /*filterMethod(){
-    if (this.useFilter) {
-      filter(this.useFilter),
-      this.useFilter = null;
-      this.on_offFilterInfo$
-    } else {
-      this.useFilter.pipe{
-        filter()
-      }
-    }
-  }
-  */
 
 
 
