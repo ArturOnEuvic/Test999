@@ -21,7 +21,6 @@ export class RxjsLearningComponent implements OnInit {
   lastInput$ = new BehaviorSubject<string>('');
   useFilter = new Subject<string>();
   on_offFilterInfo$ = new BehaviorSubject<boolean>(false);
-  myFilter: any;
   myInterval: any;
   //subjects mogą być observerem i observable w tym samym czasie
   //subject pozwala propagować wiele subskrypcji na raz
@@ -93,7 +92,7 @@ export class RxjsLearningComponent implements OnInit {
     this.textAreaOutput$.next('');
   }
 
-  displayFilterInfo(): void {
+  changeFilterValue(): void {
     if(this.on_offFilterInfo$.getValue()){
       this.on_offFilterInfo$.next(false)
     } else {
