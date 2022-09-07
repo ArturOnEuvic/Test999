@@ -11,7 +11,7 @@
    </button>
 
    <button mat-button id="time_event" (click)="clearAll()">
-      Clear (TODO)
+      Clear
    </button>
 
    <form [formGroup]="inputForm">
@@ -30,10 +30,8 @@
    </form>>
 
    TODO: FILTER
+   <mat-slide-toggle class="dark_mode" (change)="displayFilterInfo()">Filter</mat-slide-toggle>
 
-
-
-   <mat-slide-toggle class="dark_mode">Filter</mat-slide-toggle>
 
    <div class="panel">
       TODO: Status:<br>

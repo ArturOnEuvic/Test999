@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { BehaviorSubject, filter, from, map, merge, Subject, takeLast} from 'rxjs';
+import { BehaviorSubject, filter, from, map, merge, repeat, Subject, takeLast} from 'rxjs';
 
 
 @Component({
@@ -20,13 +20,13 @@ export class RxjsLearningComponent implements OnInit {
   on_offInfo$ = new BehaviorSubject<boolean>(false);
   lastInput$ = new BehaviorSubject<string>('');
   useFilter = new Subject<string>();
-  on_offFilterInfo$ = new Subject<boolean>();
+  on_offFilterInfo$ = new BehaviorSubject<boolean>(false);
+  myFilter: any;
   myInterval: any;
   //subjects mogą być observerem i observable w tym samym czasie
   //subject pozwala propagować wiele subskrypcji na raz
   inputForm: FormGroup;
   //jak dobrze rozumiem te formgroup jest wbudowane i definiuje jak będzie działał input field na stronie
-
 
 
 //konstruktor inicjalizuje klasy, ale nie wykonuje żadnej pracy
@@ -49,7 +49,6 @@ export class RxjsLearningComponent implements OnInit {
     //const booleanValues$ = this.on_offInfo$.controls['timer_on_off'].valueChanges;
 
 
-
     //! scalanie wyników w jeden stream, przy pomocy 'merge'
     //podział wartości na subskrybowane wcześniej i aktualne
     //! MM: tutaj nie ma żadnego podziału, po prostu przy użyciu merge, scalamy nowe wartości emitowane przez te cztery streamy 
@@ -59,9 +58,11 @@ export class RxjsLearningComponent implements OnInit {
         let currentValue = this.textAreaOutput$.value;
         const newLine = "\r\n";
         this.textAreaOutput$.next(valueEmitted + newLine + currentValue);
-        this.lastInput$.next(valueEmitted);
       }); 
-
+    merge(propagatevalueChanges$, kopytkaChanges$.pipe(map(k => k + ' kopytko')))
+      .subscribe((valueEmitted: string) => {
+         this.lastInput$.next(valueEmitted)
+      })
   }
 
 //tworzenie metod reagujących na interakcję usera (generuje random, interval, czyści output area):
@@ -92,14 +93,14 @@ export class RxjsLearningComponent implements OnInit {
     this.textAreaOutput$.next('');
   }
 
-  lastInputMethod(){
-      this.lastInput$.pipe(takeLast(1))
+  displayFilterInfo(): void {
+    if(this.on_offFilterInfo$.getValue()){
+      this.on_offFilterInfo$.next(false)
+    } else {
+      this.on_offFilterInfo$.next(true)
+
+    }
   }
-
-
-
-
-
 
 }
 
